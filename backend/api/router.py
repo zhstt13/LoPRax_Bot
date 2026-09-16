@@ -19,5 +19,4 @@ async def download(url: str, background_tasks: BackgroundTasks):
 
 @router.get("/jobs/{job_id}")
 async def job_status(job_id: str):
-    job = get_job_status(job_id)
-    return job
+    return get_job_status(job_id)
