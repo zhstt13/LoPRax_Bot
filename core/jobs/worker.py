@@ -4,7 +4,7 @@ from pathlib import Path
 
 from core.jobs.manager import JobStatus, job_manager
 from core.models import ParsedInput
-from core.downloader.ytdlp import probe_url
+from core.downloader.ytdlp import download_ytdlp
 
 
 async def run_download_job(job_id: str):
@@ -16,19 +16,19 @@ async def run_download_job(job_id: str):
 
     try:
         output_dir = Path("downloads") / job_id
-        output_dir.mkdir(parents=True, exist_ok=True)
-
         parsed = ParsedInput(source_url=job.source_url)
-        info = await probe_url(parsed)
+
+        artifact = await download_ytdlp(parsed, output_dir)
 
         job_manager.update(
             job_id,
             status=JobStatus.COMPLETED,
             progress=100,
             result={
-                "type": "probe",
-                "output_dir": str(output_dir),
-                "info": info,
+                "type": "artifact",
+                "path": str(artifact.path),
+                "file_name": artifact.file_name,
+                "send_type": artifact.send_type,
             },
         )
 
