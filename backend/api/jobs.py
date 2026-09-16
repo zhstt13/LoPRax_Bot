@@ -1,6 +1,4 @@
-from core.jobs.manager import JobManager
-
-job_manager = JobManager()
+from core.jobs.manager import job_manager
 
 
 def get_job_status(job_id: str):
